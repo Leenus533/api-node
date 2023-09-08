@@ -4,7 +4,7 @@ import { checkForErrors } from "./modules/middlewares"
 import { createNewProduct, deleteProduct, getProducts, getSingleProduct, updateProductName } from "./handlers/product"
 import { Express } from "./types/type"
 
-const router = Router()
+const router: any = Router()
 
 router.get("/product", getProducts)
 router.post("/product", body("name").isString(), checkForErrors, createNewProduct)

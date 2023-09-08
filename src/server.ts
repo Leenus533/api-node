@@ -5,7 +5,7 @@ import cors from "cors"
 import { protect } from "./modules/auth"
 import { createNewUser, signIn } from "./handlers/user"
 
-const app = Express()
+const app: Express.Application = Express()
 app.use(cors())
 app.use(morgan("dev"))
 app.use(Express.json())
