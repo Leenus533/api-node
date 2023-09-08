@@ -1,44 +1,28 @@
 import { Router } from "express"
-import { ExtendedRequest, Express } from "./types/type"
-import { body, validationResult } from "express-validator"
+import { body } from "express-validator"
 import { checkForErrors } from "./modules/middlewares"
-import { createNewProduct, deleteProduct, getProducts, getSingleProduct, updateProduct } from "./handlers/product"
+import { createNewProduct, deleteProduct, getProducts, getSingleProduct, updateProductName } from "./handlers/product"
+import { Express } from "./types/type"
 
 const router = Router()
 
 router.get("/product", getProducts)
+router.post("/product", body("name").isString(), checkForErrors, createNewProduct)
 router.get("/product/:id", getSingleProduct)
-router.post("/product/:id", body("name").isString(), checkForErrors, createNewProduct)
 router.delete("/product/:id", deleteProduct)
 
-router.get("/update", () => {})
-router.get("/update/:id", updateProduct)
-router.put(
-	"/update/:id",
-	body("title").optional(),
-	body("body").optional(),
-	body("status").isIn(["IN_PROGRESS", "SHIPPED", "DEPRECATED"]).optional(),
-	body("version").optional(),
-	checkForErrors,
-	() => {}
-)
-router.post(
-	"/update",
-	body("title").exists().isString(),
-	body("body").exists().isString(),
-	body("productId").exists().isString(),
-	() => {}
-)
-router.get("/update-point", () => {})
-router.get("/update-point/:id", () => {})
-router.put("/update-point/:id", body("name").optional().isString(), body("description").optional().isString(), () => {})
-router.post(
-	"/update-point",
-	body("name").isString(),
-	body("description").isString(),
-	body("updateId").exists().isString(),
-	() => {}
-)
-router.delete("/update-point/:id", () => {})
+router.use((err: any, req: Express.Request, res: Express.Response) => {
+	if (err.type === "auth") {
+		res.status(401).json({ message: "unauthorized" })
+	} else if (err.type === "input") {
+		res.status(401).json({ message: "invalid input" })
+	} else if (err.type === "server") {
+		res.status(500).json({ message: "server error" })
+	} else {
+		res.status(500).json({
+			message: "Unknown Error Occured",
+		})
+	}
+})
 
 export default router

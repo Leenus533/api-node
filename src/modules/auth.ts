@@ -2,6 +2,7 @@ import { User } from "@prisma/client"
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
 import { ExtendedRequest, Express } from "../types/type"
+import { error } from "console"
 
 export const comparePasswords = (password: string, hash: string): Promise<boolean> => {
 	return bcrypt.compare(password, hash)
@@ -12,7 +13,7 @@ export const hashPassword = (password: string): Promise<string> => {
 }
 
 export const createJWT = (user: User) => {
-	if (typeof process.env.JWT_SECRET === "undefined") return
+	if (typeof process.env.JWT_SECRET === "undefined") throw error("Invalid Token, ENV not Setup")
 	const token = jwt.sign(
 		{
 			id: user.id,

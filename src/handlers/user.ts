@@ -11,9 +11,11 @@ export const createNewUser = async (req: Express.Request, res: Express.Response)
 			},
 		})
 		const token = createJWT(user)
+		res.status(200)
 		res.json({ token })
-	} catch (e) {
+	} catch (e: any) {
 		res.status(401)
+		console.log(e)
 		res.json({ message: "Unable to create new User" })
 	}
 }
@@ -33,7 +35,9 @@ export const signIn = async (req: Express.Request, res: Express.Response) => {
 
 		const token = createJWT(user)
 		res.json({ token })
-	} catch (E) {
-		console.log(E)
+	} catch (e: any) {
+		res.status(401)
+		console.log(e)
+		res.json({ message: "Unable to Sign In" })
 	}
 }

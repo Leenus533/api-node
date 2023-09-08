@@ -1,6 +1,7 @@
 import e from "express"
 import prisma from "../db"
 import { Express, ExtendedRequest } from "../types/type"
+import { title } from "process"
 
 export const getProducts = async (req: ExtendedRequest, res: Express.Response) => {
 	try {
@@ -56,6 +57,13 @@ export const getSingleProduct = async (req: ExtendedRequest, res: Express.Respon
 				belongsToId: req.user?.id,
 			},
 		})
+		if (product === null) {
+			res.status(404)
+			res.json({ message: "Product Not found" })
+		} else {
+			res.status(200)
+			res.json({ data: product })
+		}
 	} catch (e) {
 		res.status(404)
 		res.json({ message: "Unable to find Product" })
@@ -79,7 +87,7 @@ export const deleteProduct = async (req: ExtendedRequest, res: Express.Response)
 		res.json({ message: "Unable to delete Product" })
 	}
 }
-export const updateProduct = async (req: ExtendedRequest, res: Express.Response) => {
+export const updateProductName = async (req: ExtendedRequest, res: Express.Response) => {
 	const id = req.params.id
 	try {
 		if (typeof req.user === "string") throw e
