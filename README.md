@@ -1,6 +1,6 @@
 # api-node
 
-A simple CRUB api with authentication for a user with products. 
+A simple CRUD api with authentication for a user with products.
 
 Made using
 Runtime : Node.js
